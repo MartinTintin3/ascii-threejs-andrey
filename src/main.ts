@@ -20,7 +20,7 @@ const composer = new EffectComposer( renderer );
 const effect = new ASCIIEffect({
 	characters: ` .:,'-^=*+?!|0#X%WM@`,
 	fontSize: 70,
-	cellSize: 10,
+	cellSize: 8,
 	color: '#ff0000',
 	invert: false
 });
@@ -41,7 +41,7 @@ const pointLight1 = new THREE.PointLight( 0xffffff, 3, 0, 0 );
 pointLight1.position.set( 500, 500, 500 );
 scene.add( pointLight1 );
 
-const pointLight2 = new THREE.PointLight( 0xffffff, 1, 0, 0 );
+const pointLight2 = new THREE.PointLight( 0xffffff, 7, 0, 0 );
 pointLight2.position.set( - 500, - 500, - 500 );
 scene.add( pointLight2 );
 
@@ -53,12 +53,18 @@ camera.position.y = 150;
 camera.position.z = 500;
 controls.update();
 
-loader.load("/Donut.obj", object => {
+let obj = null;
+
+loader.load("/statues.obj", object => {
+	obj = object;
 	scene.add(object);
 
-	object.scale.x = 300;
-	object.scale.y = 300;
-	object.scale.z = 300;
+	object.scale.x = 160;
+	object.scale.y = 160;
+	object.scale.z = 160;
+window["donut"] = object;
+
+	object.position.y = -260;
 
 	console.log("processing");
 	
@@ -91,6 +97,10 @@ composer.addPass( renderPass );
 composer.addPass(new EffectPass(camera, effect));
 
 function animate() {
+	  if (obj) {
+	obj.rotation.y += 0.01;
+  }
+
   controls.update();
 
   composer.render();
